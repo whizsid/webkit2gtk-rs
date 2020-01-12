@@ -14,6 +14,7 @@ external_libraries = [
     "Gio",
     "Gtk",
     "JavaScriptCore",
+    "Soup"
 ]
 
 generate = [
@@ -117,6 +118,7 @@ manual = [
     "JavaScriptCore.GlobalContextRef",
     "JavaScriptCore.Value",
     "JavaScriptCore.ValueRef",
+    "Soup.MessageHeaders",
     "WebKit2.ScriptDialog",
 ]
 
