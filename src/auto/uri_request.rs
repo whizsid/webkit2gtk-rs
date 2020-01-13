@@ -9,6 +9,7 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
 use glib_sys;
+use soup;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -32,7 +33,7 @@ impl URIRequest {
 pub const NONE_URI_REQUEST: Option<&URIRequest> = None;
 
 pub trait URIRequestExt: 'static {
-    //fn get_http_headers(&self) -> /*Ignored*/Option<soup::MessageHeaders>;
+    fn get_http_headers(&self) -> Option<soup::MessageHeaders>;
 
     #[cfg(any(feature = "v2_12", feature = "dox"))]
     fn get_http_method(&self) -> Option<GString>;
@@ -45,9 +46,13 @@ pub trait URIRequestExt: 'static {
 }
 
 impl<O: IsA<URIRequest>> URIRequestExt for O {
-    //fn get_http_headers(&self) -> /*Ignored*/Option<soup::MessageHeaders> {
-    //    unsafe { TODO: call webkit2_sys:webkit_uri_request_get_http_headers() }
-    //}
+    fn get_http_headers(&self) -> Option<soup::MessageHeaders> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_uri_request_get_http_headers(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     #[cfg(any(feature = "v2_12", feature = "dox"))]
     fn get_http_method(&self) -> Option<GString> {

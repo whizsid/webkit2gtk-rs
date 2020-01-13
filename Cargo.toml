@@ -71,5 +71,8 @@ git = "https://github.com/gtk-rs/sys"
 [dependencies.javascriptcore-rs]
 git = "https://github.com/gtk-rs/javascriptcore-rs"
 
+[dependencies.soup]
+git = "http://github.com/whizsid/soup-rs"
+
 [dependencies.webkit2gtk-sys]
 path = "./webkit2gtk-sys"

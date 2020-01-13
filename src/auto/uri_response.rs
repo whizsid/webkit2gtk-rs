@@ -9,6 +9,8 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
 use glib_sys;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
+use soup;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -27,8 +29,8 @@ pub const NONE_URI_RESPONSE: Option<&URIResponse> = None;
 pub trait URIResponseExt: 'static {
     fn get_content_length(&self) -> u64;
 
-    //#[cfg(any(feature = "v2_6", feature = "dox"))]
-    //fn get_http_headers(&self) -> /*Ignored*/Option<soup::MessageHeaders>;
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
+    fn get_http_headers(&self) -> Option<soup::MessageHeaders>;
 
     fn get_mime_type(&self) -> Option<GString>;
 
@@ -66,10 +68,14 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_6", feature = "dox"))]
-    //fn get_http_headers(&self) -> /*Ignored*/Option<soup::MessageHeaders> {
-    //    unsafe { TODO: call webkit2_sys:webkit_uri_response_get_http_headers() }
-    //}
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
+    fn get_http_headers(&self) -> Option<soup::MessageHeaders> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_uri_response_get_http_headers(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     fn get_mime_type(&self) -> Option<GString> {
         unsafe {
